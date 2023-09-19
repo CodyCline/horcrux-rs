@@ -19,7 +19,7 @@ The split command supports standard input!
 cat ../files/classified.txt | horcrust split --shards 4 --threshold 2
 ```
 
-You can specify where the shards can be placed using the optional `directory`` argument 
+You can specify where the shards can be placed using the optional `directory` argument 
 
 ```sh
 horcrust split classified.txt --shards 4 --threshold 4 --destination ../../documents/stash
