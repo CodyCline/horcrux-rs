@@ -1,6 +1,6 @@
 [package]
 name = "horcrust"
-version = "1.1.1"
+version = "1.2.1"
 edition = "2021"
 description = "Horcrust is a command-line-tool which splits a file into encrypted shards for safekeeping. As long as the specified threshold is met, a user can resurrect their original file at any time - no password necessary."
 license = "MIT"
