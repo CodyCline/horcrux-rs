@@ -7,7 +7,7 @@ use std::{
     time::SystemTime,
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct HorcruxHeader {
     pub canonical_file_name: String,
     pub timestamp: SystemTime,
@@ -72,11 +72,11 @@ impl Horcrux {
             contents: file,
         })
     }
-}
 
-
-pub fn formatted_header(index: u8, total: u8, json_header: String) -> String {
-    let remaining = total - 1;
-    let header = format!("?? THIS FILE IS A HORCRUX. \n?? IT IS ONE OF {total} HORCRUXES THAT EACH CONTAIN PART OF AN ORIGINAL FILE. \n?? THIS IS HORCRUX NUMBER {index} of {total}. \n?? IN ORDER TO RESURRECT THIS ORIGINAL FILE YOU MUST FIND THE OTHER {remaining} HORCRUXES AND THEN BIND THEM USING THE PROGRAM FOUND AT THE FOLLOWING URL \n?? https://github.com \n \n-- HEADER --\n{json_header} \n-- BODY --\n");
-    header
+    pub fn formatted_header(index: u8, total: u8, json_header: String) -> String {
+        let remaining = total - 1;
+        let header = format!("?? THIS FILE IS A HORCRUX. \n?? IT IS ONE OF {total} HORCRUXES THAT EACH CONTAIN PART OF AN ORIGINAL FILE. \n?? THIS IS HORCRUX NUMBER {index} of {total}. \n?? IN ORDER TO RESURRECT THIS ORIGINAL FILE YOU MUST FIND THE OTHER {remaining} HORCRUXES AND THEN BIND THEM USING THE PROGRAM FOUND AT THE FOLLOWING URL \n?? https://github.com \n \n-- HEADER --\n{json_header} \n-- BODY --\n");
+        header
+    }
+    
 }

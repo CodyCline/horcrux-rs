@@ -42,7 +42,7 @@ pub fn is_qualified_file(f: &str) -> Result<PathBuf, String> {
     }
 }
 
-const CHUNK_SIZE: usize = 4096; // Set your desired chunk size here
+const CHUNK_SIZE: usize = 4096;
 
 //This function handles std input and reads the contents to a temporary file.
 pub fn handle_std_in() -> Result<PathBuf, std::io::Error> {

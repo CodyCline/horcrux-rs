@@ -3,9 +3,8 @@ use atty::{isnt, Stream};
 use clap::{error::ErrorKind, Parser, CommandFactory};
 use cli::{Cli, Commands, BANNER};
 
-use crate::{commands::split::split, utils::handle_std_in, commands::bind::bind};
-pub mod commands;
-pub mod crypto;
+use crate::utils::handle_std_in;
+
 pub mod utils;
 pub mod cli;
 #[cfg(test)]
@@ -40,7 +39,7 @@ fn main() {
                     err.exit();
             }
             println!("🔮 Splitting your secret ...");
-            let split_result = split(
+            let split_result = horcrux_rs::split(
                     &source, 
                     destination.as_ref().unwrap(), 
                     args.shards,
@@ -60,7 +59,7 @@ fn main() {
             let source = &args.source;
             let destination = &args.destination;
             println!("📖 Recovering your secret ...");
-            let result = bind(source.as_ref().unwrap(), destination.as_ref().unwrap());
+            let result = horcrux_rs::bind(source.as_ref().unwrap(), destination.as_ref().unwrap());
             match result {
                 Ok(_) => println!("🔑 Recovered the secret! "),
                 Err(err) => {

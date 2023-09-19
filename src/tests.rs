@@ -2,6 +2,8 @@
 // #[allow(unused_variables)]
 mod tests {
     use chacha20poly1305::aead::OsRng;
+    use horcrux_rs::crypto::{encrypt_file, decrypt_file};
+    use horcrux_rs::horcrux::Horcrux;
     use rand::RngCore;
     use std::fs::{self, File, OpenOptions};
     use std::io::{LineWriter, Read, Write};
@@ -9,9 +11,6 @@ mod tests {
     // Import the necessary modules and functions you want to test
     use sha2::{Digest, Sha256};
 
-    use crate::commands::horcrux::Horcrux;
-    use crate::commands::{bind::bind, split::split};
-    use crate::crypto::{decrypt_file, encrypt_file};
 
     #[test]
     fn it_works() {
@@ -26,13 +25,13 @@ mod tests {
             .expect("Should write to temp file");
         temp_file.flush().expect("Should write contents.");
 
-        let split_result = split(&dir.join("secret.txt"), &dir, 1, 1);
+        let split_result = horcrux_rs::split(&dir.join("secret.txt"), &dir, 1, 1);
         assert!(dir.join("secret.txt").exists());
 
         fs::remove_file(dir.join("secret.txt")).expect("File should be removed");
         assert!(!dir.join("secret.txt").exists());
 
-        let bind_result = bind(&dir, &dir);
+        let bind_result = horcrux_rs::bind(&dir, &dir);
 
         assert!(bind_result.is_ok());
         assert!(split_result.is_ok());
@@ -122,7 +121,7 @@ mod tests {
             .write_all(b"Hello, world!")
             .expect("Should write to temp file");
         temp_file.flush().expect("Should write contents.");
-        let split_result = split(&dir, &PathBuf::from("/"), 1, 1);
+        let split_result = horcrux_rs::split(&dir, &PathBuf::from("/"), 1, 1);
 
         assert!(split_result.is_err());
 
@@ -140,7 +139,7 @@ mod tests {
             .expect("Should write to temp file");
         temp_file.flush().expect("Should write contents.");
 
-        let split_result = split(&dir.join("encoded.txt"), &dir.join("test-folder"), 1, 1);
+        let split_result = horcrux_rs::split(&dir.join("encoded.txt"), &dir.join("test-folder"), 1, 1);
         assert!(dir
             .join("test-folder")
             .join("encoded_1_of_1.horcrux")
@@ -207,7 +206,7 @@ mod tests {
         let mut writer = LineWriter::new(horcrux_file);
         writer.write_all(header.as_bytes()).expect("Should write.");
 
-        let bind_result = bind(&dir, &dir);
+        let bind_result = horcrux_rs::bind(&dir, &dir);
 
         assert!(bind_result.is_err());
         assert_eq!(bind_result.unwrap_err().to_string(), "Not enough key fragments.");
@@ -229,14 +228,14 @@ mod tests {
             .expect("Should write to temp file");
         temp_file.flush().expect("Should write contents.");
 
-        split(&dir.join("conspiracy.txt"), &dir, 2, 2).expect("Split should work.");
+        horcrux_rs::split(&dir.join("conspiracy.txt"), &dir, 2, 2).expect("Split should work.");
 
         fs::remove_file(dir.join("conspiracy.txt")).expect("File should be removed.");
         fs::remove_file(dir.join("conspiracy_1_of_2.horcrux")).expect("File should be removed.");
 
         assert!(!dir.join("conspiracy.txt").exists());
 
-        let bind_result = bind(&dir, &dir);
+        let bind_result = horcrux_rs::bind(&dir, &dir);
 
         assert!(bind_result.is_err());
         assert_eq!(bind_result.unwrap_err().to_string(), "Cannot find enough horcruxes to recover `conspiracy.txt` found 1 matching horcruxes and 2 matches are required to recover the file.");
@@ -250,7 +249,7 @@ mod tests {
 
         File::create(file_path).expect("Should create temp file.");
 
-        let bind_result = bind(&dir, &dir);
+        let bind_result = horcrux_rs::bind(&dir, &dir);
         let err_msg = bind_result.as_ref().unwrap_err();
         assert!(bind_result.is_err());
         assert_eq!(
@@ -271,9 +270,9 @@ mod tests {
             .write_all(b"Hello, world!")
             .expect("Should write to temp file.");
         temp_file.flush().expect("Should write contents");
-        split(&dir.join("cryptic.txt"), &dir, 1, 1).expect("Split should work.");
+        horcrux_rs::split(&dir.join("cryptic.txt"), &dir, 1, 1).expect("Split should work.");
 
-        bind(&dir, &dir.join("test-folder")).expect("Binding should work.");
+        horcrux_rs::bind(&dir, &dir.join("test-folder")).expect("Binding should work.");
 
         assert!(dir.join("test-folder").join("cryptic.txt").exists());
 

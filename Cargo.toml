@@ -6,6 +6,16 @@ description = "Horcrust is a command-line-tool which splits a file into encrypte
 license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+
+[[bin]]
+name="horcrust"
+path="src/main.rs"
+
+
+[lib]
+name = "horcrux_rs"
+path = "src/lib/lib.rs"
+
 [dependencies]
 rand = "0.8.4"
 serde_bytes = "0.11"
